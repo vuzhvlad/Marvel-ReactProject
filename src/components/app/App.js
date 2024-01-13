@@ -1,4 +1,4 @@
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 
 import { ComicsPage, MainPage } from "../pages"; // it will be looking for index.js that is inside of this folder
 
@@ -12,14 +12,10 @@ const App = () => {
             <div className="app">
                 <AppHeader/>
                 <main>
-                    <Switch>
-                    <Route exact path="/">
-                        <MainPage/>
-                    </Route>
-                    <Route exact path="/comics">
-                        <ComicsPage/>
-                    </Route>
-                    </Switch>
+                    <Routes>
+                    <Route path="/" element={<MainPage/>}/>
+                    <Route path="/comics" element={<ComicsPage/>}/>
+                    </Routes>
                 </main>
             </div>
         </Router>

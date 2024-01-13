@@ -1,13 +1,10 @@
 import {useState, useEffect} from 'react';
-import { PropTypes } from 'prop-types';
 import Spinner from '../spinner/PicSpinner';
 import ErrorMessage from '../errorMessage/ErrorMsg';
 import Skeleton from '../skeleton/Skeleton';
 import useMarvelService from '../../services/MarvelService';
 
 import './charInfo.scss';
-
-
 
 const CharInfo = (props) => {    
 
@@ -96,10 +93,6 @@ const View = ({char}) => { // non logical part
                 </ul>
         </>
     )
-}
-
-CharInfo.propTypes = { // checking the type of prop
-    charId: PropTypes.string
 }
 
 export default CharInfo;
