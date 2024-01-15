@@ -1,4 +1,6 @@
 import {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
+
 import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/PicSpinner';
 import ErrorMessage from '../errorMessage/ErrorMsg';
@@ -40,14 +42,14 @@ const ComicsList = () => {
     }
 
     function renderItems (arr) { // function for rendering all the items on the page
-        const comics = arr.map((item, i) => {
+        const comics = arr.map((item, i) => { // it also created links for every comics that creates unique link by id of comics
             return (
                 <li className="comics__item" key={i}>
-                    <a href="#">
+                    <Link to={`/comics/${item.id}`}> 
                         <img src={item.thumbnail} alt={item.title} className="comics__item-img"/>
                         <div className="comics__item-name">{item.title}</div>
                         <div className="comics__item-price">{item.price}</div>
-                    </a>
+                    </Link>
                 </li>
             )
         })

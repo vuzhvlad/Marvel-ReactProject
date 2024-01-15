@@ -27,7 +27,7 @@ const useMarvelService = () => {
 		return res.data.results.map(_transformComics);
 	};
 
-	const getComics = async (id) => {// we are using sync await in every function because we are fetching
+	const getComic = async (id) => {// we are using sync await in every function because we are fetching
 		const res = await request(`${_apiBase}comics/${id}?${_apiKey}`); // we use request method that we ve got from our custom hook it has loading and error inside of itself
 		return _transformComics(res.data.results[0]);
 	};
@@ -70,7 +70,7 @@ const useMarvelService = () => {
 		getAllCharacters,
 		getCharacter,
 		getAllComics,
-		getComics,
+		getComic,
 	}; // returning object with all methods we need
 };
 

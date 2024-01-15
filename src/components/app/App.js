@@ -1,6 +1,6 @@
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 
-import { ComicsPage, MainPage } from "../pages"; // it will be looking for index.js that is inside of this folder
+import { ComicsPage, MainPage, Page404, SingleComicPage } from "../pages"; // it will be looking for index.js that is inside of this folder
 
 import AppHeader from "../appHeader/AppHeader";
 
@@ -15,6 +15,8 @@ const App = () => {
                     <Routes>
                     <Route path="/" element={<MainPage/>}/>
                     <Route path="/comics" element={<ComicsPage/>}/>
+                    <Route path="/comics/:comicId" element={<SingleComicPage/>}/>
+                    <Route path="*" element={<Page404/>}/>
                     </Routes>
                 </main>
             </div>

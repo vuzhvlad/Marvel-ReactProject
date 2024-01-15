@@ -33,12 +33,6 @@ const CharList = (props) => {
             ended = true;
         }   
 
-        const filteredChars = newCharList.filter((newChar) => {
-            return charList.find((oldChar) => {
-                return oldChar.id === newChar.id;
-            }) === undefined;
-        });
-
         setCharList(charList => [...charList, ...newCharList]);
         setNewItemLoading(newItemLoading => false);
         setOffset(offset => offset + 18);
@@ -56,9 +50,9 @@ const CharList = (props) => {
     function renderItems(arr) { // fucntion for rendering all characters
         const items =  arr.map((item, i) => { // function for creating every item
 
-            let imgStyle = {'objectFit' : 'cover'}; // for items without images
+            let imgStyle = {'objectFit' : 'cover'}; 
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
-                imgStyle = {'objectFit' : 'unset'};
+                imgStyle = {'objectFit' : 'unset'}; // for items without images
             }
             
             return (
@@ -92,12 +86,9 @@ const CharList = (props) => {
     } // returning structure where all characters are inside
 
     const items = renderItems(charList); 
-
-            
+          
     const errorMessage = error ? <ErrorMessage/> : null;
     const spinner = loading && !newItemLoading ? <Spinner/> : null;
-
-    console.log("charList");
 
     return (
         <div className="char__list">
