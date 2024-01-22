@@ -9,7 +9,7 @@ import decoration from '../../resources/img/vision.png';
 
 const MainPage = () => {
 
-    const [selectedChar, setChar] = useState(null);
+    const [selectedChar, setChar] = useState(undefined);
 
     const onCharSelected = (id) => { // function for putting id into state that we put on lower level of CharList and then we send this state to CharInfo
         setChar(id);

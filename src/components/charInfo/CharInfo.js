@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react';
+
 import Spinner from '../spinner/PicSpinner';
 import ErrorMessage from '../errorMessage/ErrorMsg';
 import Skeleton from '../skeleton/Skeleton';
@@ -6,10 +7,10 @@ import useMarvelService from '../../services/MarvelService';
 
 import './charInfo.scss';
 
+
 const CharInfo = (props) => {    
 
     const [char, setChar] = useState(null);
-
     const {loading, error, getCharacter, clearError} = useMarvelService(); // service for getting characters
 
     useEffect(() => { // compponent will change depeding on charId
@@ -81,8 +82,7 @@ const View = ({char}) => { // non logical part
                     {comics.length > 0 ? null : 'There is no comics for this character'}
                     
                     {
-                        comics.map((item, i) => { // creating map for getting all comics for character
-                            if(i > 9) return; // if it is more than 10 comics we just stop
+                        comics.slice(0, 9).map((item, i) => { // creating map for getting all comics for character
                             return (
                                 <li key={i} className="char__comics-item">
                                 {item.name}

@@ -1,7 +1,7 @@
 import {lazy, Suspense} from 'react';
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 
-// import { ComicsPage, MainPage, SingleComicPage } from "../pages"; // it will be looking for index.js that is inside of this folder 
+//import { Page404, MainPage, ComicsPage, SingleComicPage } from "../pages/index"; // it will be looking for index.js that is inside of this folder 
 import AppHeader from "../appHeader/AppHeader";
 import Spinner from '../spinner/PicSpinner';
 
