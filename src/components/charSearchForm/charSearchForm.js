@@ -25,16 +25,16 @@ const CharSearchForm = () => { // component for searching form of single char by
 
     const errorMessage = error ? <div className="char__search-critical-error"><ErrorMessage /></div> : null;
 
-    const results = !char ? null : char.length > 0 ?
+    const results = !char ? null : char.length > 0 ? 
                     <div className="char__search-wrapper">
                         <div className="char__search-success">There is! Do you want to {char[0].name} page?</div>
-                        <Link to={`/characters/${char[0].id}`} className="button button__secondary">
+                        <Link to={`/characters/${char[0].id}`} className="button button__secondary"> 
                             <div className="inner">To page</div>
                         </Link>
                     </div> : 
                     <div className="char__search-error">
                         The character was not found. Check the name and try again
-                    </div>; // html for character if it was found
+                    </div>; // html for character if it was found, if it was not it gives us empty array so we can show that we didnt find any characters
 
     return (
         <div className="char__search-form">
@@ -45,7 +45,7 @@ const CharSearchForm = () => { // component for searching form of single char by
                 validationSchema = {Yup.object({ // using Yup for validation
                     charName: Yup.string().required('This field is required')
                 })}
-                onSubmit = { ({charName}) => { // updating char on submiting
+                onSubmit = { ({charName}) => { // calling update char by charname in initial values so we send our form from waht user typed inside
                     updateChar(charName);
                 }}
             >
