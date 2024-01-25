@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useMemo} from 'react';
 import { Link } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
@@ -12,16 +12,12 @@ const setContent = (process, Component, newItemLoading) => { // special FSM beca
     switch (process) {
         case 'waiting':
             return <Spinner/>;
-            break;
         case 'loading':
             return newItemLoading ? <Component/> : <Spinner/>; // we render new items ? then we render component if no it is a first loading so we load spinner
-            break;
         case 'confirmed':
             return <Component/>;
-            break;
         case 'error':
             return <ErrorMessage/>;
-            break;
         default: 
             throw new Error('Unexpected process state');
     }
@@ -35,7 +31,7 @@ const ComicsList = () => {
     const [offset, setOffset] = useState(8); // offset
     const [comicsEnded, setComicsEnded] = useState(false); // if it is ended
 
-    const {loading, error, getAllComics, process, setProcess} = useMarvelService(); // getting states and method from our custom hook
+    const {getAllComics, process, setProcess} = useMarvelService(); // getting states and method from our custom hook
 
     useEffect(() => { // mounting for the first time
         onRequest(offset, true);
@@ -89,9 +85,13 @@ const ComicsList = () => {
         )
     }
 
+    const elements = useMemo(() => {
+        return setContent(process, () => renderItems(comicsList), newItemLoading); /* instead of component we send a function that creates it */
+    }, [process]);
+
     return (
         <div className="comics__list">
-            {setContent(process, () => renderItems(comicsList), newItemLoading) /* instead of component we send a function that creates it */} 
+            {elements} 
             <button 
                 disabled={newItemLoading} 
                 style={{'display' : comicsEnded ? 'none' : 'block'}}

@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect, useRef, useMemo} from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import useMarvelService from '../../services/MarvelService';
@@ -10,20 +10,16 @@ import ErrorMessage from '../errorMessage/ErrorMsg';
 
 const STEP = 9
 
-const setContent = (process, Component, newItemLoading) => {
+const setContent = (process, Component, newItemLoading) => { // special FSM because charlist has unique logic for loading new items 
     switch (process) {
         case 'waiting':
-            return <Spinner/>;
-            break;
+            return <Spinner/>;     
         case 'loading':
-            return newItemLoading ? <Component/> : <Spinner/>; // we render new items ? then we render component if no it is a first loading so we load spinner
-            break;
+            return newItemLoading ? <Component/> : <Spinner/>; // we render new items ? then we render component if no it is a first loading so we load spinner       
         case 'confirmed':
-            return <Component/>;
-            break;
+            return <Component/>;      
         case 'error':
-            return <ErrorMessage/>;
-            break;
+            return <ErrorMessage/>;           
         default: 
             throw new Error('Unexpected process state');
     }
@@ -116,10 +112,13 @@ const CharList = (props) => {
         )
     } // returning structure where all characters are inside
 
+    const elements = useMemo(() => { // fixed problem with not working classes and rerendering by useMemo
+        return setContent(process, () => renderItems(charList), newItemLoading)
+    }, [process]);
 
     return (
         <div className="char__list">
-            {setContent(process, () => renderItems(charList), newItemLoading)}
+            {elements}
             <button className="button button__main button__long"
                     disabled={newItemLoading}
                     style={{'display': charEnded ? 'none' : 'block'}}
