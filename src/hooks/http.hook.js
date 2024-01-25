@@ -1,12 +1,11 @@
 import {useState, useCallback} from "react";
 
 export const useHttp = () => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [process, setProcess] = useState('waiting');
 
     const request = useCallback(async (url, method = 'GET', body = null, headers = {'Content-Type': 'application/json'}) => { // we put this function inside of useCallback cause we predict that it wont be needed to be called when page rerenders every time, also it is async because it is request
 
-        setLoading(true); // starting loading
+        setProcess('loading');
 
         try {
             const response = await fetch(url, {method, body, headers}); // we sent a fetch by url and setting inside of the object
@@ -17,18 +16,18 @@ export const useHttp = () => {
     
             const data = await response.json(); // transfer our response from json to normal js
 
-            setLoading(false); //everything is uploaded so loading is false
             return data;
 
         } catch(e) {
-            setLoading(false); // stopping loading
-            setError(e.message); // sending the message of our error that we ve got
+            setProcess('error');
             throw e; // throwing error
         }
 
     }, []); // function for creating request
 
-    const clearError = useCallback(() => setError(null), []); // function for setting error to null again
+    const clearError = useCallback(() => {
+        setProcess('loading');
+    }, []); // function for setting error to null again
 
-    return {loading, request, error, clearError}
+    return {request, clearError, process, setProcess}
 }

@@ -8,15 +8,34 @@ import ErrorMessage from '../errorMessage/ErrorMsg';
 
 import './comicsList.scss';
 
+const setContent = (process, Component, newItemLoading) => { // special FSM because charlist has unique logic for loading new items 
+    switch (process) {
+        case 'waiting':
+            return <Spinner/>;
+            break;
+        case 'loading':
+            return newItemLoading ? <Component/> : <Spinner/>; // we render new items ? then we render component if no it is a first loading so we load spinner
+            break;
+        case 'confirmed':
+            return <Component/>;
+            break;
+        case 'error':
+            return <ErrorMessage/>;
+            break;
+        default: 
+            throw new Error('Unexpected process state');
+    }
+}
+
 const ComicsList = () => {
 
     //all states
     const [comicsList, setComicsList] = useState([]); // list
     const [newItemLoading, setnewItemLoading] = useState(false); // if we load anything new
-    const [offset, setOffset] = useState(0); // offset
+    const [offset, setOffset] = useState(8); // offset
     const [comicsEnded, setComicsEnded] = useState(false); // if it is ended
 
-    const {loading, error, getAllComics} = useMarvelService(); // getting states and method from our custom hook
+    const {loading, error, getAllComics, process, setProcess} = useMarvelService(); // getting states and method from our custom hook
 
     useEffect(() => { // mounting for the first time
         onRequest(offset, true);
@@ -27,6 +46,7 @@ const ComicsList = () => {
 
         getAllComics(offset)
             .then(onComicsListLoaded)
+            .then(() => setProcess('confirmed'));
     }
 
     const onComicsListLoaded = (newComicsList) => {
@@ -69,16 +89,9 @@ const ComicsList = () => {
         )
     }
 
-    const comics = renderItems(comicsList); // putting all comics into var
-
-    const errorMessage = error ? <ErrorMessage/> : null; // if error is true
-    const spinner = loading && !newItemLoading ? <Spinner/> : null; // if loading is true and newiteloading is false
-
     return (
         <div className="comics__list">
-            {errorMessage}
-            {spinner}
-            {comics}
+            {setContent(process, () => renderItems(comicsList), newItemLoading) /* instead of component we send a function that creates it */} 
             <button 
                 disabled={newItemLoading} 
                 style={{'display' : comicsEnded ? 'none' : 'block'}}

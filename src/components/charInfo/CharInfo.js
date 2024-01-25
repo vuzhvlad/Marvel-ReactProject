@@ -1,9 +1,7 @@
 import {useState, useEffect} from 'react';
 
-import Spinner from '../spinner/PicSpinner';
-import ErrorMessage from '../errorMessage/ErrorMsg';
-import Skeleton from '../skeleton/Skeleton';
 import useMarvelService from '../../services/MarvelService';
+import setContent from '../../utils/setContent';
 
 import './charInfo.scss';
 
@@ -11,7 +9,7 @@ import './charInfo.scss';
 const CharInfo = (props) => {    
 
     const [char, setChar] = useState(null);
-    const {loading, error, getCharacter, clearError} = useMarvelService(); // service for getting characters
+    const {getCharacter, clearError, process, setProcess} = useMarvelService(); // service for getting characters
 
     useEffect(() => { // compponent will change depeding on charId
         updateChar();
@@ -26,32 +24,24 @@ const CharInfo = (props) => {
             clearError(); // to clean error if something goes wrong
             
             getCharacter(charId) // then we get character by id
-            .then(onCharLoaded) // and load this character and changing state
+                .then(onCharLoaded) // and load this character and changing state
+                .then(() => setProcess('confirmed')); // only when it is loaded process will be ended
     }
 
     const onCharLoaded = (char) => { 
         setChar(char);
     }
 
-    const skeleton = char || loading || error ? null : <Skeleton/>; // if any of these true we dont put anything if they are false we use skeleton
-    const errorMessage = error ? <ErrorMessage/> : null; // boolean or null
-    const spinner = loading ? <Spinner/> : null; // boolean or null
-    const content = !(loading || error || !char) ? <View char={char}/> : null; // if we dont have loading or error or char then we show content
-    // ternar for showing what is happening on the page depedingon state, if it is a null it wont be shown on the page
-
     return (
         <div className="char__info">
-            {skeleton}
-            {errorMessage}
-            {spinner}
-            {content}
+            {setContent(process, View, char)}
         </div>
     )
 }
 
 
-const View = ({char}) => { // non logical part
-    const {name, description, thumbnail, homepage, wiki, comics} = char;
+const View = ({data}) => { // non logical part
+    const {name, description, thumbnail, homepage, wiki, comics} = data;
 
     let styleImg= { objectFit: "cover" };
     if(thumbnail.indexOf('image_not_available') > -1) { // if it is character without image we use this one

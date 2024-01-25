@@ -6,13 +6,13 @@ import './singleComicLayout.scss';
 const SingleComicLayout = ({data}) => { // layout for single comic page
 
     const {title, description, pageCount, thumbnail, language, price} = data;
-
+    //creating dynamic title with Helmet
     return (
         <div className="single-comic">
             <Helmet>
                 <meta
                     name="description"
-                    content={`${title} comics book}`}
+                    content={`${title} comics book`}
                 />
                 <title>{title}</title>
             </Helmet>
